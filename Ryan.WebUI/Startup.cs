@@ -20,10 +20,24 @@ namespace Ryan.WebUI
         }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute("default", "{controller}/{action}/{id?}",
+                    defaults: new
+                    {
+                        controller = "home",
+                        action = "index"
+                    });
+            });
         }
     }
 }
