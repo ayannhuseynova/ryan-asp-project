@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Ryan.WebUI.Models.DataContexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +23,18 @@ namespace Ryan.WebUI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddRouting(services =>
+            {
+                services.LowercaseUrls = true;
+            });
+
+            services.AddDbContext<RyanDbContext>(services => 
+            {
+                string connectionString = configuration.GetConnectionString("cString");
+
+                services.UseSqlServer(connectionString);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
